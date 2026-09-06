@@ -1,4 +1,4 @@
-import { ArrowLeft, Loader2, Search, FilePlus2, UserPlus, Info, Send } from 'lucide-react'
+import { ArrowLeft, Loader2, Search, FilePlus2, UserPlus, Info, Send, User } from 'lucide-react'
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AppShell } from '../../components/layout/AppShell'

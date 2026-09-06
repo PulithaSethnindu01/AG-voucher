@@ -16,6 +16,8 @@ export function AppShell({ children }: { children: ReactNode }) {
   const { profile, logout } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
 
+  const firstRole = profile?.roles && profile.roles.length > 0 ? profile.roles[0] : null
+
   return (
     <div className="min-h-screen bg-[#f8fafc]">
       <header className="sticky top-0 z-30 border-b border-slate-200/60 bg-white/80 backdrop-blur-md">
@@ -44,9 +46,9 @@ export function AppShell({ children }: { children: ReactNode }) {
                   <span className="text-sm font-bold text-slate-800 leading-none">{profile.name}</span>
                   <div className="mt-1 flex items-center gap-2">
                     <span className="text-[10px] font-medium text-slate-400">{profile.user_number}</span>
-                    {profile.roles.length > 0 && (
+                    {firstRole && (
                       <span className="inline-flex rounded-full bg-brand-50 px-1.5 py-0.5 text-[9px] font-bold uppercase tracking-wider text-brand-600">
-                        {ROLE_LABELS[profile.roles[0]] ?? profile.roles[0]}
+                        {ROLE_LABELS[firstRole] ?? firstRole}
                       </span>
                     )}
                   </div>
