@@ -35,7 +35,7 @@ import type { VoucherHistory, VoucherWithDetails } from '../../types/database'
 
 export default function VoucherDetailPage() {
   const { id } = useParams<{ id: string }>()
-  const { profile, hasRole } = useAuth()
+  const { profile } = useAuth()
 
   const [voucher, setVoucher] = useState<VoucherWithDetails | null>(null)
   const [history, setHistory] = useState<(VoucherHistory & { actor: any; assigned_to: any })[]>([])
