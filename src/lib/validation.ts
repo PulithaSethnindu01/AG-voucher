@@ -9,7 +9,6 @@ export interface FieldError {
   message: string
 }
 
-const USER_NUMBER_PATTERN = /^[a-zA-Z0-9-]{3,20}$/
 const MOBILE_PATTERN = /^[0-9+][0-9\s-]{6,14}$/
 
 export function validateName(name: string): string | null {
@@ -23,9 +22,7 @@ export function validateName(name: string): string | null {
 export function validateUserNumber(userNumber: string): string | null {
   const trimmed = userNumber.trim()
   if (!trimmed) return 'User number is required.'
-  if (!USER_NUMBER_PATTERN.test(trimmed)) {
-    return 'User number must be 3-20 characters (letters, numbers, dashes only).'
-  }
+  if (trimmed.length < 1) return 'User number is too short.'
   return null
 }
 
