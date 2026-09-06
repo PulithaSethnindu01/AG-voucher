@@ -6,6 +6,7 @@ import RegisterPage from './pages/auth/RegisterPage'
 import VouchersPage from './pages/vouchers/VouchersPage'
 import VoucherDetailPage from './pages/vouchers/VoucherDetailPage'
 import NewVoucherPage from './pages/vouchers/NewVoucherPage'
+import UsersPage from './pages/admin/UsersPage'
 
 export default function App() {
   return (
@@ -49,6 +50,14 @@ export default function App() {
             element={
               <ProtectedRoute>
                 <VoucherDetailPage />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/admin/users"
+            element={
+              <ProtectedRoute requireAnyRole={['ADMIN', 'SUPERVISOR']}>
+                <UsersPage />
               </ProtectedRoute>
             }
           />

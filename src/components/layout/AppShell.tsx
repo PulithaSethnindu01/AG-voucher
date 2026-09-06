@@ -1,5 +1,6 @@
-import { FileStack, LogOut, Menu, User, X } from 'lucide-react'
+import { FileStack, LogOut, Menu, User, X, Users, LayoutDashboard } from 'lucide-react'
 import { useState, type ReactNode } from 'react'
+import { Link, useLocation } from 'react-router-dom'
 import { useAuth } from '../../context/AuthContext'
 
 const ROLE_LABELS: Record<string, string> = {
@@ -13,27 +14,58 @@ const ROLE_LABELS: Record<string, string> = {
 }
 
 export function AppShell({ children }: { children: ReactNode }) {
-  const { profile, logout } = useAuth()
+  const { profile, logout, hasRole } = useAuth()
   const [menuOpen, setMenuOpen] = useState(false)
+  const location = useLocation()
 
   const firstRole = profile?.roles && profile.roles.length > 0 ? profile.roles[0] : null
+  const isAdminOrSupervisor = hasRole('ADMIN') || hasRole('SUPERVISOR')
+
+  const navItems = [
+    { label: 'Dashboard', href: '/', icon: LayoutDashboard },
+    ...(isAdminOrSupervisor ? [{ label: 'Users', href: '/admin/users', icon: Users }] : []),
+  ]
 
   return (
     <div className="min-h-screen bg-[#f8fafc]">
       <header className="sticky top-0 z-30 border-b border-slate-200/60 bg-white/80 backdrop-blur-md">
         <div className="mx-auto flex h-16 max-w-7xl items-center justify-between px-4 sm:px-6 lg:px-8">
-          <div className="flex items-center gap-3">
-            <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-600 text-white shadow-lg shadow-brand-200">
-              <FileStack className="h-5 w-5" aria-hidden="true" />
-            </div>
-            <div className="flex flex-col leading-tight">
-              <span className="text-sm font-bold tracking-tight text-slate-900 sm:text-base">
-                AG Voucher
-              </span>
-              <span className="text-[10px] font-medium uppercase tracking-widest text-slate-400">
-                Management System
-              </span>
-            </div>
+          <div className="flex items-center gap-8">
+            <Link to="/" className="flex items-center gap-3 group">
+              <div className="flex h-10 w-10 items-center justify-center rounded-xl bg-brand-600 text-white shadow-lg shadow-brand-200 transition-transform group-hover:scale-105">
+                <FileStack className="h-5 w-5" aria-hidden="true" />
+              </div>
+              <div className="flex flex-col leading-tight">
+                <span className="text-sm font-bold tracking-tight text-slate-900 sm:text-base">
+                  AG Voucher
+                </span>
+                <span className="text-[10px] font-medium uppercase tracking-widest text-slate-400">
+                  Management System
+                </span>
+              </div>
+            </Link>
+
+            {/* Desktop Navigation */}
+            <nav className="hidden md:flex items-center gap-1">
+              {navItems.map((item) => {
+                const Icon = item.icon
+                const isActive = location.pathname === item.href
+                return (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    className={`flex items-center gap-2 px-3 py-2 rounded-lg text-sm font-bold transition-colors ${
+                      isActive
+                        ? 'bg-brand-50 text-brand-700'
+                        : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+                    }`}
+                  >
+                    <Icon className="h-4 w-4" />
+                    {item.label}
+                  </Link>
+                )
+              })}
+            </nav>
           </div>
 
           <div className="hidden items-center gap-6 sm:flex">
@@ -66,7 +98,7 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
 
           <button
-            className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 sm:hidden"
+            className="rounded-lg p-2 text-slate-500 hover:bg-slate-100 md:hidden"
             type="button"
             onClick={() => setMenuOpen((v) => !v)}
             aria-label="Toggle menu"
@@ -77,7 +109,7 @@ export function AppShell({ children }: { children: ReactNode }) {
 
         {/* Mobile Menu */}
         {menuOpen && (
-          <div className="border-t border-slate-100 bg-white px-4 py-4 shadow-xl sm:hidden animate-in fade-in slide-in-from-top-2">
+          <div className="border-t border-slate-100 bg-white px-4 py-4 shadow-xl md:hidden animate-in fade-in slide-in-from-top-2">
             {profile && (
               <div className="mb-6 flex items-center gap-4 px-2">
                 <div className="flex h-10 w-10 items-center justify-center rounded-full bg-slate-100 text-slate-500">
@@ -89,14 +121,30 @@ export function AppShell({ children }: { children: ReactNode }) {
                 </div>
               </div>
             )}
-            <div className="space-y-1">
-               {profile?.roles.map((r) => (
-                <div key={r} className="px-2 py-1 text-[10px] font-bold uppercase tracking-widest text-slate-400">
-                  Role: {ROLE_LABELS[r] ?? r}
-                </div>
-              ))}
-            </div>
-            <button onClick={logout} className="mt-4 btn-danger w-full" type="button">
+
+            <nav className="space-y-1 mb-6">
+              {navItems.map((item) => {
+                const Icon = item.icon
+                const isActive = location.pathname === item.href
+                return (
+                  <Link
+                    key={item.href}
+                    to={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    className={`flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm font-bold transition-colors ${
+                      isActive
+                        ? 'bg-brand-50 text-brand-700'
+                        : 'text-slate-500 hover:text-slate-900 hover:bg-slate-50'
+                    }`}
+                  >
+                    <Icon className="h-5 w-5" />
+                    {item.label}
+                  </Link>
+                )
+              })}
+            </nav>
+
+            <button onClick={logout} className="btn-danger w-full py-3 rounded-xl" type="button">
               <LogOut className="h-4 w-4" aria-hidden="true" />
               Sign out
             </button>
