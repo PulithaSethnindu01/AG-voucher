@@ -13,6 +13,7 @@ import {
   Tag,
   DollarSign,
   Activity,
+  Calendar,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
@@ -32,6 +33,11 @@ import {
   resubmitVoucher,
 } from '../../services/voucherService'
 import type { VoucherHistory, VoucherWithDetails } from '../../types/database'
+
+const MONTH_NAMES = [
+  '', 'January', 'February', 'March', 'April', 'May', 'June',
+  'July', 'August', 'September', 'October', 'November', 'December'
+]
 
 export default function VoucherDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -187,11 +193,11 @@ export default function VoucherDetailPage() {
 
                   <div className="space-y-1">
                     <dt className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
-                       <DollarSign className="h-3 w-3" />
-                       Amount
+                       <Calendar className="h-3 w-3" />
+                       Voucher Period
                     </dt>
-                    <dd className="text-2xl font-black text-slate-900 tabular-nums">
-                      {voucher.amount ? `$${voucher.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}` : 'Not set'}
+                    <dd className="text-sm font-bold text-slate-900">
+                      {voucher.voucher_month ? MONTH_NAMES[voucher.voucher_month] : '-'} {voucher.voucher_year || '-'}
                     </dd>
                   </div>
 
@@ -202,6 +208,16 @@ export default function VoucherDetailPage() {
                     </dt>
                     <dd className="text-sm font-bold text-slate-900">
                       {new Date(voucher.created_at).toLocaleDateString(undefined, { dateStyle: 'long' })}
+                    </dd>
+                  </div>
+
+                  <div className="sm:col-span-2 space-y-1">
+                    <dt className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
+                       <DollarSign className="h-3 w-3" />
+                       Amount
+                    </dt>
+                    <dd className="text-2xl font-black text-slate-900 tabular-nums">
+                      {voucher.amount ? `$${voucher.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}` : 'Not set'}
                     </dd>
                   </div>
 

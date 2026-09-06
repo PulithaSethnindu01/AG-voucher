@@ -88,6 +88,8 @@ export async function createVoucher(input: {
   voucherTypeId: string
   amount: number
   description: string
+  voucherMonth: number
+  voucherYear: number
 }) {
   const { data, error } = await supabase.rpc('create_voucher', {
     p_voucher_number: input.voucherNumber,
@@ -95,8 +97,18 @@ export async function createVoucher(input: {
     p_voucher_type_id: input.voucherTypeId,
     p_amount: input.amount,
     p_description: input.description,
+    p_voucher_month: input.voucherMonth,
+    p_voucher_year: input.voucherYear,
   })
-  if (error) throw error
+
+  if (error) {
+    // Handle unique constraint violation for voucher_number (Postgres code 23505)
+    if (error.code === '23505') {
+      throw new Error(`The voucher number "${input.voucherNumber}" is already in use. Please use a unique number.`)
+    }
+    throw error
+  }
+
   return data as string
 }
 

@@ -1,4 +1,4 @@
-import { ArrowLeft, Loader2, Search, FilePlus2, UserPlus, Info, Send, User } from 'lucide-react'
+import { ArrowLeft, Loader2, Search, FilePlus2, UserPlus, Info, Send, User, Calendar } from 'lucide-react'
 import { useEffect, useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { AppShell } from '../../components/layout/AppShell'
@@ -6,6 +6,21 @@ import { Alert } from '../../components/ui/Alert'
 import { createVoucher, fetchVoucherTypes, searchProfiles } from '../../services/voucherService'
 import type { VoucherType } from '../../types/database'
 import { useAuth } from '../../context/AuthContext'
+
+const MONTHS = [
+  { value: 1, label: 'January' },
+  { value: 2, label: 'February' },
+  { value: 3, label: 'March' },
+  { value: 4, label: 'April' },
+  { value: 5, label: 'May' },
+  { value: 6, label: 'June' },
+  { value: 7, label: 'July' },
+  { value: 8, label: 'August' },
+  { value: 9, label: 'September' },
+  { value: 10, label: 'October' },
+  { value: 11, label: 'November' },
+  { value: 12, label: 'December' },
+]
 
 export default function NewVoucherPage() {
   const navigate = useNavigate()
@@ -21,11 +36,22 @@ export default function NewVoucherPage() {
   const [amount, setAmount] = useState('')
   const [description, setDescription] = useState('')
 
+  const now = new Date()
+  const [voucherMonth, setVoucherMonth] = useState(now.getMonth() + 1)
+  const [voucherYear, setVoucherYear] = useState(now.getFullYear())
+
   // Requester search state
   const [requesterQuery, setRequesterQuery] = useState('')
   const [searchResults, setSearchResults] = useState<{ id: string; name: string; user_number: string }[]>([])
   const [selectedRequester, setSelectedRequester] = useState<{ id: string; name: string; user_number: string } | null>(null)
   const [isSearching, setIsSearching] = useState(false)
+
+  // Generate year options (e.g., from 2020 to current year + 1)
+  const years = []
+  const currentYear = new Date().getFullYear()
+  for (let y = currentYear + 1; y >= 2020; y--) {
+    years.push(y)
+  }
 
   useEffect(() => {
     async function loadData() {
@@ -74,7 +100,7 @@ export default function NewVoucherPage() {
     e.preventDefault()
     setError(null)
 
-    if (!voucherNumber || !selectedRequester || !voucherTypeId || !amount) {
+    if (!voucherNumber || !selectedRequester || !voucherTypeId || !amount || !voucherMonth || !voucherYear) {
       setError('Please fill in all required fields.')
       return
     }
@@ -87,6 +113,8 @@ export default function NewVoucherPage() {
         voucherTypeId,
         amount: parseFloat(amount),
         description,
+        voucherMonth,
+        voucherYear,
       })
       navigate('/')
     } catch (err: any) {
@@ -228,6 +256,45 @@ export default function NewVoucherPage() {
                     </div>
                   </div>
 
+                  {/* Voucher Month and Year Selection */}
+                  <div className="space-y-2">
+                    <label className="form-label flex items-center gap-2">
+                      <Calendar className="h-3 w-3 text-slate-400" />
+                      Voucher Period (Month/Year)
+                    </label>
+                    <div className="grid grid-cols-2 gap-4">
+                      <select
+                        id="voucherMonth"
+                        className="form-input h-11"
+                        value={voucherMonth}
+                        onChange={(e) => setVoucherMonth(parseInt(e.target.value))}
+                        required
+                      >
+                        {MONTHS.map((m) => (
+                          <option key={m.value} value={m.value}>
+                            {m.label}
+                          </option>
+                        ))}
+                      </select>
+                      <select
+                        id="voucherYear"
+                        className="form-input h-11"
+                        value={voucherYear}
+                        onChange={(e) => setVoucherYear(parseInt(e.target.value))}
+                        required
+                      >
+                        {years.map((y) => (
+                          <option key={y} value={y}>
+                            {y}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <p className="mt-1 text-[10px] font-medium text-slate-400">
+                      Specify the month and year this voucher belongs to.
+                    </p>
+                  </div>
+
                   <div className="space-y-2">
                     <label htmlFor="amount" className="form-label">
                       Amount
@@ -294,7 +361,7 @@ export default function NewVoucherPage() {
                  </li>
                  <li className="flex gap-3">
                    <div className="h-5 w-5 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-[10px] font-bold shrink-0">2</div>
-                   <p className="text-xs leading-relaxed text-slate-600 font-medium">Ensure the voucher number matches the physical documentation if applicable.</p>
+                   <p className="text-xs leading-relaxed text-slate-600 font-medium">Specify the correct Month and Year for accounting and tracking purposes.</p>
                  </li>
                  <li className="flex gap-3">
                    <div className="h-5 w-5 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-[10px] font-bold shrink-0">3</div>

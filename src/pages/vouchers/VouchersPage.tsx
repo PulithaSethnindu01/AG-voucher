@@ -1,4 +1,4 @@
-import { Plus, Search, Filter, FileText, CheckCircle2, Clock, ListChecks } from 'lucide-react'
+import { Plus, Search, Filter, FileText, CheckCircle2, Clock, ListChecks, Calendar } from 'lucide-react'
 import { useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { AppShell } from '../../components/layout/AppShell'
@@ -8,6 +8,11 @@ import { VoucherStatusBadge } from '../../components/vouchers/VoucherStatusBadge
 import { useAuth } from '../../context/AuthContext'
 import { fetchVouchers } from '../../services/voucherService'
 import type { VoucherWithDetails } from '../../types/database'
+
+const MONTH_NAMES = [
+  '', 'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+  'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+]
 
 export default function VouchersPage() {
   const { hasRole } = useAuth()
@@ -128,6 +133,7 @@ export default function VouchersPage() {
                 <thead>
                   <tr>
                     <th className="table-header px-6 py-4">Voucher #</th>
+                    <th className="table-header px-6 py-4">Period</th>
                     <th className="table-header px-6 py-4">Requester</th>
                     <th className="table-header px-6 py-4">Type</th>
                     <th className="table-header px-6 py-4">Amount</th>
@@ -140,6 +146,14 @@ export default function VouchersPage() {
                     <tr key={voucher.id} className="table-row group">
                       <td className="table-cell font-bold text-slate-900 tabular-nums">
                         {voucher.voucher_number}
+                      </td>
+                      <td className="table-cell">
+                        <div className="flex items-center gap-1.5 text-slate-600 font-medium">
+                          <Calendar className="h-3.5 w-3.5 text-slate-400" />
+                          <span>
+                            {voucher.voucher_month ? MONTH_NAMES[voucher.voucher_month] : '-'} {voucher.voucher_year || '-'}
+                          </span>
+                        </div>
                       </td>
                       <td className="table-cell">
                         <div className="flex flex-col">

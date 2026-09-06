@@ -106,6 +106,8 @@ export interface Voucher {
   third_approver_id: string | null
   final_payment_officer_id: string | null
   rejection_reason: string | null
+  voucher_month: number | null
+  voucher_year: number | null
   created_at: string
   updated_at: string
 }
