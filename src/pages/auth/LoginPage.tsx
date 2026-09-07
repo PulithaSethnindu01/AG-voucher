@@ -34,7 +34,7 @@ export default function LoginPage() {
     setIsSubmitting(false)
 
     if (!result.success) {
-      setFormError(result.error ?? 'Login failed. Please try again.')
+      setFormError(result.error ?? 'පුරනය වීම අසාර්ථක විය. කරුණාකර නැවත උත්සාහ කරන්න.')
       return
     }
 
@@ -49,8 +49,8 @@ export default function LoginPage() {
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-600 text-white shadow-xl shadow-brand-200 animate-in zoom-in duration-500">
             <FileStack className="h-8 w-8" aria-hidden="true" />
           </div>
-          <h1 className="text-2xl font-black tracking-tight text-slate-900">Welcome Back</h1>
-          <p className="mt-2 text-sm font-medium text-slate-500">Sign in to manage your vouchers</p>
+          <h1 className="text-2xl font-black tracking-tight text-slate-900">VOUCHER INFORMATION SYSTEM</h1>
+          <p className="mt-2 text-sm font-medium text-slate-500">ඔබේ වවුචර් කළමනාකරණය කිරීමට පුරන්න</p>
         </div>
 
         <div className="card overflow-hidden shadow-xl shadow-slate-200/50 animate-in slide-in-from-bottom-4 duration-700">
@@ -64,7 +64,7 @@ export default function LoginPage() {
 
               <div>
                 <label htmlFor="userNumber" className="form-label">
-                  User Number
+                  සේවා අංකය
                 </label>
                 <input
                   id="userNumber"
@@ -89,7 +89,7 @@ export default function LoginPage() {
               <div>
                 <div className="flex items-center justify-between mb-1.5">
                   <label htmlFor="password" className="form-label mb-0">
-                    Password
+                    මුරපදය
                   </label>
                   <button type="button" className="text-[11px] font-bold uppercase tracking-wider text-brand-600 hover:text-brand-700 transition-colors">
                     Forgot?
@@ -141,16 +141,16 @@ export default function LoginPage() {
 
           <div className="bg-slate-50 border-t border-slate-100 px-8 py-4 text-center">
             <p className="text-sm font-medium text-slate-500">
-              Don&apos;t have an account?{' '}
+              ගිණුමක් නොමැති ද?{' '}
               <Link to="/register" className="font-bold text-brand-600 hover:text-brand-700 transition-colors">
-                Create one now
+                නව ගිණුමක් සාදන්න
               </Link>
             </p>
           </div>
         </div>
 
         <p className="mt-8 text-center text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">
-          Official AG Internal System
+          VERSION 1.0.0
         </p>
       </div>
     </div>

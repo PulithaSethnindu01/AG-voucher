@@ -36,7 +36,7 @@ export default function UsersPage() {
       await updateUserRole(userId, role, hasRole ? 'REMOVE' : 'ADD')
       await loadUsers()
     } catch (err: any) {
-      alert(err.message || 'Failed to update role')
+      alert(err.message || 'භූමිකාව යාවත්කාලීන කිරීමට අසමත් විය.')
     } finally {
       setIsActionLoading(null)
     }
@@ -48,7 +48,7 @@ export default function UsersPage() {
       await toggleUserStatus(userId, !currentStatus)
       await loadUsers()
     } catch (err: any) {
-      alert(err.message || 'Failed to update status')
+      alert(err.message || 'තත්ත්වය යාවත්කාලීන කිරීමට අසමත් විය.')
     } finally {
       setIsActionLoading(null)
     }
@@ -63,7 +63,7 @@ export default function UsersPage() {
     <AppShell>
       <div className="space-y-8">
         <div>
-          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">User Management</h1>
+          <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">පරිශීලක කළමනාකරණය</h1>
           <p className="mt-1 text-sm font-medium text-slate-500">
             Manage system access, roles, and administrative permissions.
           </p>
@@ -73,7 +73,7 @@ export default function UsersPage() {
           <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
           <input
             type="text"
-            placeholder="Search by name or user number..."
+            placeholder="නම හෝ සේවා අංකය අනුව සොයන්න..."
             className="form-input pl-10"
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
@@ -84,7 +84,7 @@ export default function UsersPage() {
 
         {isLoading ? (
           <div className="flex h-64 items-center justify-center">
-            <Spinner label="Loading user directory..." />
+            <Spinner label="පූරණය වෙමින්..." />
           </div>
         ) : (
           <div className="table-container">

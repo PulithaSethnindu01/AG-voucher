@@ -35,7 +35,7 @@ export default function RegisterPage() {
 
     if (!result.success) {
       setIsSubmitting(false)
-      setFormError(result.error ?? 'Registration failed. Please try again.')
+      setFormError(result.error ?? 'ලියාපදිංචිය අසාර්ථක විය. කරුණාකර නැවත උත්සාහ කරන්න.')
       return
     }
 
@@ -75,14 +75,14 @@ export default function RegisterPage() {
               <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
                 <div>
                   <label htmlFor="name" className="form-label">
-                    Full Name
+                    සම්පූර්ණ නම
                   </label>
                   <input
                     id="name"
                     name="name"
                     type="text"
                     autoComplete="name"
-                    placeholder="John Doe"
+                    placeholder="රොබට් සිල්වා"
                     className={`form-input ${fieldMessage(fieldErrors, 'name') ? 'border-red-300 focus:border-red-500 focus:ring-red-500/10' : ''}`}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -96,7 +96,7 @@ export default function RegisterPage() {
 
                 <div>
                   <label htmlFor="userNumber" className="form-label">
-                    User Number
+                    සේවා අංකය
                   </label>
                   <input
                     id="userNumber"
@@ -118,14 +118,14 @@ export default function RegisterPage() {
 
               <div>
                 <label htmlFor="mobileNumber" className="form-label">
-                  Mobile Number
+                  දුරකතන අංකය
                 </label>
                 <input
                   id="mobileNumber"
                   name="mobileNumber"
                   type="tel"
                   autoComplete="tel"
-                  placeholder="+1 234 567 890"
+                  placeholder="+94 70 123 4567"
                   className={`form-input ${fieldMessage(fieldErrors, 'mobileNumber') ? 'border-red-300 focus:border-red-500 focus:ring-red-500/10' : ''}`}
                   value={mobileNumber}
                   onChange={(e) => setMobileNumber(e.target.value)}
@@ -139,7 +139,7 @@ export default function RegisterPage() {
 
               <div>
                 <label htmlFor="password" className="form-label">
-                  Password
+                  මුරපදය
                 </label>
                 <div className="relative group">
                   <input
@@ -168,7 +168,7 @@ export default function RegisterPage() {
                   <p className="form-error">{fieldMessage(fieldErrors, 'password')}</p>
                 )}
                 <p className="mt-2 text-[10px] font-bold uppercase tracking-wider text-slate-400">
-                  Minimum 8 characters with letters & numbers
+                  අවම වශයෙන් අකුරු සහ අංක 8ක්
                 </p>
               </div>
 
@@ -187,7 +187,7 @@ export default function RegisterPage() {
 
           <div className="bg-slate-50 border-t border-slate-100 px-8 py-4 text-center">
             <p className="text-sm font-medium text-slate-500">
-              Already have an account?{' '}
+              දැනටමත් ගිණුමක් තිබේද?{' '}
               <Link to="/login" className="font-bold text-brand-600 hover:text-brand-700 transition-colors">
                 Sign in
               </Link>
@@ -196,7 +196,7 @@ export default function RegisterPage() {
         </div>
 
         <p className="mt-8 text-center text-[11px] font-bold uppercase tracking-[0.2em] text-slate-400">
-          Official AG Internal System
+          VERSION 1.0.0
         </p>
       </div>
     </div>

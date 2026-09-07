@@ -8,18 +8,18 @@ import type { VoucherType } from '../../types/database'
 import { useAuth } from '../../context/AuthContext'
 
 const MONTHS = [
-  { value: 1, label: 'January' },
-  { value: 2, label: 'February' },
-  { value: 3, label: 'March' },
-  { value: 4, label: 'April' },
-  { value: 5, label: 'May' },
-  { value: 6, label: 'June' },
-  { value: 7, label: 'July' },
-  { value: 8, label: 'August' },
-  { value: 9, label: 'September' },
-  { value: 10, label: 'October' },
-  { value: 11, label: 'November' },
-  { value: 12, label: 'December' },
+  { value: 1, label: 'ජනවාරි' },
+  { value: 2, label: 'පෙබරවාරි' },
+  { value: 3, label: 'මාර්තු' },
+  { value: 4, label: 'අප්‍රේල්' },
+  { value: 5, label: 'මැයි' },
+  { value: 6, label: 'ජුනි' },
+  { value: 7, label: 'ජුලි' },
+  { value: 8, label: 'අගෝස්තු' },
+  { value: 9, label: 'සැප්තැම්බර්' },
+  { value: 10, label: 'ඔක්තෝබර්' },
+  { value: 11, label: 'නොවැම්බර්' },
+  { value: 12, label: 'දෙසැම්බර්' },
 ]
 
 export default function NewVoucherPage() {
@@ -68,7 +68,7 @@ export default function NewVoucherPage() {
           setRequesterQuery(`${profile.name} (${profile.user_number})`)
         }
       } catch (err) {
-        setError('Failed to load form data.')
+        setError('පෝරම දත්ත පූරණය කිරීමට අසමත් විය.')
       } finally {
         setIsLoading(false)
       }
@@ -101,7 +101,7 @@ export default function NewVoucherPage() {
     setError(null)
 
     if (!voucherNumber || !selectedRequester || !voucherTypeId || !amount || !voucherMonth || !voucherYear) {
-      setError('Please fill in all required fields.')
+      setError('කරුණාකර අවශ්‍ය සියලුම ක්ෂේත්‍ර පුරවන්න.')
       return
     }
 
@@ -118,7 +118,7 @@ export default function NewVoucherPage() {
       })
       navigate('/')
     } catch (err: any) {
-      setError(err.message || 'Failed to create voucher.')
+      setError(err.message || 'වවුචරය නිර්මාණය කිරීමට අසමත් විය.')
     } finally {
       setIsSubmitting(false)
     }
@@ -141,7 +141,7 @@ export default function NewVoucherPage() {
           <div>
             <h1 className="text-3xl font-extrabold tracking-tight text-slate-900">New Voucher</h1>
             <p className="mt-1 text-sm font-medium text-slate-500">
-              Create a new payment request and initiate the approval workflow.
+              නව ගෙවීම් ඉල්ලීමක් සාදා අනුමත කිරීමේ වැඩ ප්‍රවාහය ආරම්භ කරන්න.
             </p>
           </div>
           <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-50 text-brand-600 shadow-sm shadow-brand-100">
@@ -164,7 +164,7 @@ export default function NewVoucherPage() {
                   <div className="space-y-2">
                     <label htmlFor="requester" className="form-label flex items-center gap-2">
                       <UserPlus className="h-3 w-3 text-slate-400" />
-                      Requested By
+                      අයදුම්කරු
                     </label>
                     <div className="relative group">
                       <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-brand-500" />
@@ -172,7 +172,7 @@ export default function NewVoucherPage() {
                         id="requester"
                         type="text"
                         className={`form-input pl-10 h-11 ${!selectedRequester && requesterQuery.length >= 2 ? 'border-amber-200' : ''}`}
-                        placeholder="Search by name or user number..."
+                        placeholder="නම හෝ සේවා අංකය අනුව සොයන්න..."
                         value={requesterQuery}
                         onChange={(e) => setRequesterQuery(e.target.value)}
                         required
@@ -214,7 +214,7 @@ export default function NewVoucherPage() {
                     {!selectedRequester && requesterQuery.length >= 2 && !isSearching && searchResults.length === 0 && (
                       <p className="mt-2 text-[11px] font-bold text-amber-600 uppercase tracking-wider flex items-center gap-1.5 animate-in fade-in">
                         <Info className="h-3 w-3" />
-                        No active users matching your search
+                        ඔබගේ සෙවුමට ගැලපෙන ක්‍රියාකාරී පරිශීලකයින් නැත.
                       </p>
                     )}
                   </div>
@@ -222,13 +222,13 @@ export default function NewVoucherPage() {
                   <div className="grid grid-cols-1 gap-6 sm:grid-cols-2">
                     <div className="space-y-2">
                       <label htmlFor="voucherNumber" className="form-label">
-                        Voucher Number
+                        වවුචර් අංකය
                       </label>
                       <input
                         id="voucherNumber"
                         type="text"
                         className="form-input h-11 font-mono uppercase"
-                        placeholder="e.g. V-2023-001"
+                        placeholder="e.g. V-2026-001"
                         value={voucherNumber}
                         onChange={(e) => setVoucherNumber(e.target.value)}
                         required
@@ -237,7 +237,7 @@ export default function NewVoucherPage() {
 
                     <div className="space-y-2">
                       <label htmlFor="voucherType" className="form-label">
-                        Voucher Type
+                        වවුචර් වර්ගය
                       </label>
                       <select
                         id="voucherType"
@@ -260,7 +260,7 @@ export default function NewVoucherPage() {
                   <div className="space-y-2">
                     <label className="form-label flex items-center gap-2">
                       <Calendar className="h-3 w-3 text-slate-400" />
-                      Voucher Period (Month/Year)
+                      වවුචර් කාලය (මාසය/වසර)
                     </label>
                     <div className="grid grid-cols-2 gap-4">
                       <select
@@ -291,7 +291,7 @@ export default function NewVoucherPage() {
                       </select>
                     </div>
                     <p className="mt-1 text-[10px] font-medium text-slate-400">
-                      Specify the month and year this voucher belongs to.
+                      මෙම වවුචරය අයත් වන මාසය සහ වර්ෂය සඳහන් කරන්න.
                     </p>
                   </div>
 
@@ -316,12 +316,12 @@ export default function NewVoucherPage() {
 
                   <div className="space-y-2">
                     <label htmlFor="description" className="form-label">
-                      Description & Purpose
+                      විස්තරය සහ අරමුණ
                     </label>
                     <textarea
                       id="description"
                       className="form-input min-h-[120px] py-3 leading-relaxed"
-                      placeholder="Provide details about the request..."
+                      placeholder="ඉල්ලීම පිළිබඳ විස්තර සපයන්න..."
                       value={description}
                       onChange={(e) => setDescription(e.target.value)}
                     />
@@ -371,9 +371,9 @@ export default function NewVoucherPage() {
             </div>
 
             <div className="card p-6 bg-slate-900 text-white">
-              <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">Next Step</h3>
+              <h3 className="text-xs font-bold uppercase tracking-widest text-slate-400 mb-2">ඊළඟ පියවර</h3>
               <p className="text-sm font-medium leading-relaxed">
-                After creation, you will need to assign this voucher to an authorized officer for the first stage of approval.
+                නිර්මාණය කිරීමෙන් පසු, අනුමැතිය සඳහා පළමු අදියර සඳහා ඔබ මෙම වවුචරය බලයලත් නිලධාරියෙකුට පැවරිය යුතුය.
               </p>
             </div>
           </div>
