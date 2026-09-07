@@ -5,7 +5,7 @@ import { Spinner } from '../../components/ui/Spinner'
 import { Badge } from '../../components/ui/Badge'
 import { fetchAllProfiles, updateUserRole, toggleUserStatus } from '../../services/adminService'
 import type { ProfileWithRoles, RoleName } from '../../types/database'
-import { User, Shield, ShieldAlert, UserMinus, UserPlus, Search } from 'lucide-react'
+import { User, Shield, UserMinus, UserPlus, Search } from 'lucide-react'
 
 export default function UsersPage() {
   const [users, setUsers] = useState<ProfileWithRoles[]>([])
