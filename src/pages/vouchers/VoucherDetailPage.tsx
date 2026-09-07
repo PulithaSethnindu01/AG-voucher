@@ -11,7 +11,6 @@ import {
   FileText,
   User,
   Tag,
-  DollarSign,
   Activity,
   Calendar,
   ThumbsUp,

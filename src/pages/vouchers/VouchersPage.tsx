@@ -1,8 +1,7 @@
-import { Plus, Search, Filter, FileText, CheckCircle2, Clock, ListChecks, Calendar, Download, X, Loader2, Inbox, History, User } from 'lucide-react'
+import { Plus, Search, FileText, CheckCircle2, Clock, ListChecks, Download, X, Loader2, Inbox, User } from 'lucide-react'
 import { useEffect, useState, useMemo } from 'react'
 import { Link } from 'react-router-dom'
 import { AppShell } from '../../components/layout/AppShell'
-import { Alert } from '../../components/ui/Alert'
 import { Spinner } from '../../components/ui/Spinner'
 import { VoucherStatusBadge } from '../../components/vouchers/VoucherStatusBadge'
 import { useAuth } from '../../context/AuthContext'
@@ -29,7 +28,7 @@ export default function VouchersPage() {
 
   const [vouchers, setVouchers] = useState<VoucherWithDetails[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
+  const [, setError] = useState<string | null>(null)
   const [searchTerm, setSearchTerm] = useState('')
   const [activeTab, setActiveTab] = useState<TabType>('my')
 
@@ -43,7 +42,7 @@ export default function VouchersPage() {
       setIsLoading(true)
       const data = await fetchVouchers()
       setVouchers(data)
-    } catch (err) {
+    } catch {
       setError('වවුචර් පූරණය කිරීමට අසමත් විය.')
     } finally {
       setIsLoading(false)
@@ -92,7 +91,7 @@ export default function VouchersPage() {
       link.download = `vouchers_report_${exportYear}.csv`
       link.click()
       setShowExportModal(false)
-    } catch (err) {
+    } catch {
       alert('අපනයනය අසාර්ථකයි.')
     } finally {
       setIsExporting(false)
