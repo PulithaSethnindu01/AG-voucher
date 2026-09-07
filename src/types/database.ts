@@ -85,6 +85,8 @@ export type VoucherStage =
   | 'FIRST_APPROVAL'
   | 'SECOND_APPROVAL'
   | 'THIRD_APPROVAL'
+  | 'FOURTH_APPROVAL'
+  | 'FIFTH_APPROVAL'
   | 'FINAL_PAYMENT'
   | 'COMPLETED'
 
