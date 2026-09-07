@@ -136,6 +136,8 @@ export type VoucherHistoryAction =
   | 'ASSIGNED_SECOND_APPROVER'
   | 'ASSIGNED_THIRD_APPROVER'
   | 'RECEIVED'
+  | 'APPROVED_AND_FORWARDED'
+  | 'FINAL_APPROVED'
 
 export interface VoucherHistory {
   id: string

@@ -40,7 +40,7 @@ export default function App() {
           <Route
             path="/vouchers/new"
             element={
-              <ProtectedRoute requireAnyRole={['FIRST_RECEIVER', 'ADMIN']}>
+              <ProtectedRoute requireAnyRole={['ADMIN', 'SUPERVISOR']}>
                 <NewVoucherPage />
               </ProtectedRoute>
             }
