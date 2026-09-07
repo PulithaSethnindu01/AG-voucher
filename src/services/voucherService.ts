@@ -77,8 +77,9 @@ export async function fetchVoucherTypes() {
 
 /**
  * Fetches active users eligible for a specific workflow stage.
+ * Default role is null to return ALL active users (flexible approvers).
  */
-export async function fetchActiveApprovers(role: string = 'SECOND_APPROVER') {
+export async function fetchActiveApprovers(role: string | null = null) {
   const { data, error } = await supabase
     .rpc('get_profiles_by_role', { role_name: role })
 
