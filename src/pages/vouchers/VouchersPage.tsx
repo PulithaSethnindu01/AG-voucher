@@ -92,7 +92,7 @@ export default function VouchersPage() {
       link.click()
       setShowExportModal(false)
     } catch {
-      alert('අපනයනය අසාර්ථකයි.')
+      alert('බාගත කරගැනීම අසාර්ථකයි.')
     } finally {
       setIsExporting(false)
     }
@@ -113,7 +113,7 @@ export default function VouchersPage() {
             {isSupervisor && (
               <button onClick={() => setShowExportModal(true)} className="btn-secondary h-11 px-6">
                 <Download className="h-4 w-4" />
-                දත්ත අපනයනය
+                දත්ත බාගත කරගැනීම
               </button>
             )}
             {isAdminOrSupervisor && (
@@ -210,7 +210,7 @@ export default function VouchersPage() {
           <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-sm animate-in fade-in duration-300">
             <div className="card w-full max-w-md shadow-2xl animate-in zoom-in-95 duration-300 overflow-hidden">
               <div className="p-6 border-b border-slate-100 flex items-center justify-between bg-slate-50">
-                <h2 className="text-lg font-black text-slate-900">වාර්තා අපනයනය</h2>
+                <h2 className="text-lg font-black text-slate-900">වාර්තා බාගත කරගැනීම</h2>
                 <button onClick={() => setShowExportModal(false)} className="text-slate-400 hover:text-slate-600 transition-colors"><X className="h-6 w-6" /></button>
               </div>
               <div className="p-8 space-y-6">
