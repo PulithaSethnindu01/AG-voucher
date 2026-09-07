@@ -19,6 +19,22 @@ export async function fetchVouchers() {
   return data as VoucherWithDetails[]
 }
 
+export async function fetchVouchersForExport(year: number, month?: number) {
+  let query = supabase
+    .from('vouchers_with_details')
+    .select('*')
+    .eq('voucher_year', year)
+
+  if (month) {
+    query = query.eq('voucher_month', month)
+  }
+
+  const { data, error } = await query.order('created_at', { ascending: true })
+
+  if (error) throw error
+  return data as VoucherWithDetails[]
+}
+
 export async function fetchVoucherById(id: string) {
   const { data, error } = await supabase
     .from('vouchers_with_details')

@@ -9,7 +9,7 @@ import type { ProfileWithRoles, RoleName } from '../../types/database'
 import { User, Shield, UserMinus, UserPlus, Search, X, Loader2, Key } from 'lucide-react'
 import { useAuth } from '../../context/AuthContext'
 
-const ALL_ROLES: RoleName[] = ['FIRST_RECEIVER', 'SECOND_APPROVER', 'FINAL_PAYMENT_OFFICER', 'ADMIN']
+const ALL_ROLES: RoleName[] = ['FINAL_PAYMENT_OFFICER', 'ADMIN']
 
 export default function UsersPage() {
   const { hasRole } = useAuth()
