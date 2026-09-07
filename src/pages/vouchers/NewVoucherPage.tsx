@@ -33,7 +33,6 @@ export default function NewVoucherPage() {
   // Form state
   const [voucherNumber, setVoucherNumber] = useState('')
   const [voucherTypeId, setVoucherTypeId] = useState('')
-  const [amount, setAmount] = useState('')
   const [description, setDescription] = useState('')
 
   const now = new Date()
@@ -100,7 +99,7 @@ export default function NewVoucherPage() {
     e.preventDefault()
     setError(null)
 
-    if (!voucherNumber || !selectedRequester || !voucherTypeId || !amount || !voucherMonth || !voucherYear) {
+    if (!voucherNumber || !selectedRequester || !voucherTypeId || !voucherMonth || !voucherYear) {
       setError('කරුණාකර අවශ්‍ය සියලුම ක්ෂේත්‍ර පුරවන්න.')
       return
     }
@@ -111,7 +110,6 @@ export default function NewVoucherPage() {
         voucherNumber: voucherNumber.toUpperCase(),
         requesterId: selectedRequester.id,
         voucherTypeId,
-        amount: parseFloat(amount),
         description,
         voucherMonth,
         voucherYear,
@@ -293,25 +291,6 @@ export default function NewVoucherPage() {
                     <p className="mt-1 text-[10px] font-medium text-slate-400">
                       මෙම වවුචරය අයත් වන මාසය සහ වර්ෂය සඳහන් කරන්න.
                     </p>
-                  </div>
-
-                  <div className="space-y-2">
-                    <label htmlFor="amount" className="form-label">
-                      Amount
-                    </label>
-                    <div className="relative group">
-                      <div className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 font-bold group-focus-within:text-brand-500 transition-colors">$</div>
-                      <input
-                        id="amount"
-                        type="number"
-                        step="0.01"
-                        className="form-input pl-8 h-11 font-bold text-lg tabular-nums"
-                        placeholder="0.00"
-                        value={amount}
-                        onChange={(e) => setAmount(e.target.value)}
-                        required
-                      />
-                    </div>
                   </div>
 
                   <div className="space-y-2">

@@ -86,7 +86,6 @@ export async function createVoucher(input: {
   voucherNumber: string
   requesterId: string
   voucherTypeId: string
-  amount: number
   description: string
   voucherMonth: number
   voucherYear: number
@@ -95,7 +94,6 @@ export async function createVoucher(input: {
     p_voucher_number: input.voucherNumber,
     p_requester_id: input.requesterId,
     p_voucher_type_id: input.voucherTypeId,
-    p_amount: input.amount,
     p_description: input.description,
     p_voucher_month: input.voucherMonth,
     p_voucher_year: input.voucherYear,
