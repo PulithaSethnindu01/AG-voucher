@@ -14,6 +14,7 @@ import {
   DollarSign,
   Activity,
   Calendar,
+  ThumbsUp,
 } from 'lucide-react'
 import { useEffect, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
@@ -31,6 +32,7 @@ import {
   markPaid,
   rejectVoucher,
   resubmitVoucher,
+  confirmReceipt,
 } from '../../services/voucherService'
 import type { VoucherHistory, VoucherWithDetails } from '../../types/database'
 
@@ -38,6 +40,20 @@ const MONTH_NAMES = [
   '', 'January', 'February', 'March', 'April', 'May', 'June',
   'July', 'August', 'September', 'October', 'November', 'December'
 ]
+
+const STAGE_LABELS: Record<string, string> = {
+  FIRST_APPROVAL: 'First Approval',
+  SECOND_APPROVAL: 'Second Approval',
+  THIRD_APPROVAL: 'Third Approval',
+  FINAL_PAYMENT: 'Final Payment',
+  COMPLETED: 'Completed',
+}
+
+const PREVIOUS_STAGE: Record<string, string> = {
+  SECOND_APPROVAL: 'FIRST_APPROVAL',
+  THIRD_APPROVAL: 'SECOND_APPROVAL',
+  FINAL_PAYMENT: 'THIRD_APPROVAL',
+}
 
 export default function VoucherDetailPage() {
   const { id } = useParams<{ id: string }>()
@@ -74,7 +90,7 @@ export default function VoucherDetailPage() {
       setHistory(hData)
 
       // Load officers if current user is the responsible officer and it's not at completion
-      if (vData && vData.status === 'PENDING' && vData.current_officer_id === profile?.id) {
+      if (vData && vData.status === 'PENDING' && vData.current_officer_id === profile?.id && vData.is_received) {
         if (vData.current_stage !== 'FINAL_PAYMENT') {
           // Load potential next approvers
           const approvers = await fetchActiveApprovers('SECOND_APPROVER')
@@ -140,6 +156,18 @@ export default function VoucherDetailPage() {
 
   const isCurrentOfficer = voucher.current_officer_id === profile?.id
   const isPending = voucher.status === 'PENDING'
+
+  // Logic to determine "Display Stage"
+  // Until received, display the previous stage as requested
+  const getDisplayStage = () => {
+    if (isPending && !voucher.is_received) {
+      const prevStageKey = PREVIOUS_STAGE[voucher.current_stage]
+      if (prevStageKey) {
+        return `${STAGE_LABELS[prevStageKey]} (Handing Over)`
+      }
+    }
+    return STAGE_LABELS[voucher.current_stage]
+  }
 
   return (
     <AppShell>
@@ -254,6 +282,7 @@ export default function VoucherDetailPage() {
                               <span className={`flex h-10 w-10 items-center justify-center rounded-full ring-8 ring-white ${
                                 item.action === 'REJECTED' ? 'bg-red-50 text-red-600' :
                                 item.action === 'PAID' ? 'bg-emerald-50 text-emerald-600' :
+                                item.action === 'RECEIVED' ? 'bg-blue-50 text-blue-600' :
                                 'bg-slate-50 text-slate-400'
                               }`}>
                                 <Clock className="h-5 w-5" />
@@ -304,7 +333,7 @@ export default function VoucherDetailPage() {
               <div className="space-y-6">
                 <div className="space-y-1">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Current Stage</p>
-                  <p className="text-lg font-black tracking-tight">{voucher.current_stage.replace(/_/g, ' ')}</p>
+                  <p className="text-lg font-black tracking-tight">{getDisplayStage()}</p>
                 </div>
                 <div className="space-y-1">
                   <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Pending With</p>
@@ -319,140 +348,159 @@ export default function VoucherDetailPage() {
                 <div className="mt-8 space-y-6 border-t border-slate-800 pt-8">
                   {error && <Alert variant="error">{error}</Alert>}
 
-                  {/* Flexible Approval Chain */}
-                  {voucher.current_stage !== 'FINAL_PAYMENT' && (
-                    <div className="space-y-6">
-                      {/* Option 1: Forward to next person */}
-                      <div className="space-y-3">
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Forward to Next Approver</label>
-                        {availableApprovers.length > 0 ? (
-                          <select
-                            className="form-input bg-slate-800 border-slate-700 text-white focus:ring-brand-500/20"
-                            value={selectedApproverId}
-                            onChange={(e) => setSelectedApproverId(e.target.value)}
-                          >
-                            <option value="">Select officer...</option>
-                            {availableApprovers.map(a => (
-                              <option key={a.id} value={a.id} className="text-slate-900">
-                                {a.name} ({a.user_number})
-                              </option>
-                            ))}
-                          </select>
-                        ) : (
-                          <p className="text-xs font-bold text-amber-500 italic">No other eligible approvers available</p>
-                        )}
-                        <button
-                          className="btn-secondary w-full justify-center bg-white text-slate-900 border-transparent hover:bg-slate-100"
-                          disabled={isActionLoading || !selectedApproverId || availableApprovers.length === 0}
-                          onClick={() => handleAction(() => approveAndForward(voucher.id, selectedApproverId))}
-                        >
-                          {isActionLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-                          Approve & Forward
-                        </button>
-                      </div>
-
-                      <div className="relative">
-                        <div className="absolute inset-0 flex items-center" aria-hidden="true">
-                          <div className="w-full border-t border-slate-800"></div>
-                        </div>
-                        <div className="relative flex justify-center text-[10px] font-black uppercase">
-                          <span className="bg-slate-900 px-2 text-slate-600">OR</span>
-                        </div>
-                      </div>
-
-                      {/* Option 2: Final approval to payment */}
-                      <div className="space-y-3">
-                        <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Assign Paying Officer</label>
-                        {availablePayers.length > 0 ? (
-                          <select
-                            className="form-input bg-slate-800 border-slate-700 text-white focus:ring-brand-500/20"
-                            value={selectedPayerId}
-                            onChange={(e) => setSelectedPayerId(e.target.value)}
-                          >
-                            <option value="">Select payer...</option>
-                            {availablePayers.map(p => (
-                              <option key={p.id} value={p.id} className="text-slate-900">
-                                {p.name} ({p.user_number})
-                              </option>
-                            ))}
-                          </select>
-                        ) : (
-                          <p className="text-xs font-bold text-amber-500 italic">No eligible paying officers found</p>
-                        )}
-                        <button
-                          className="btn-primary w-full justify-center shadow-lg shadow-brand-900/20"
-                          disabled={isActionLoading || !selectedPayerId || availablePayers.length === 0}
-                          onClick={() => handleAction(() => approveToPayment(voucher.id, selectedPayerId))}
-                        >
-                          {isActionLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
-                          Send to Final Payment
-                        </button>
-                      </div>
-                    </div>
-                  )}
-
-                  {/* Payment stage */}
-                  {voucher.current_stage === 'FINAL_PAYMENT' && (
+                  {/* Confirmation Stage */}
+                  {!voucher.is_received ? (
                     <div className="space-y-4">
-                       <input
-                        type="number"
-                        placeholder="Confirm Amount"
-                        className="form-input bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
-                        value={paymentAmount}
-                        onChange={(e) => setPaymentAmount(e.target.value)}
-                      />
-                      <input
-                        type="text"
-                        placeholder="Payment Reference"
-                        className="form-input bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
-                        value={paymentRef}
-                        onChange={(e) => setPaymentRef(e.target.value)}
-                      />
-                      <button
-                        className="btn-primary w-full justify-center bg-emerald-500 hover:bg-emerald-600 shadow-lg shadow-emerald-900/20"
-                        disabled={isActionLoading || !paymentAmount || !paymentRef}
-                        onClick={() => handleAction(() => markPaid(voucher.id, parseFloat(paymentAmount), paymentRef))}
+                       <p className="text-xs font-medium text-slate-400 italic">
+                         You have received this voucher. Please confirm receipt to proceed with actions.
+                       </p>
+                       <button
+                        className="btn-primary w-full justify-center shadow-lg shadow-brand-900/20"
+                        disabled={isActionLoading}
+                        onClick={() => handleAction(() => confirmReceipt(voucher.id))}
                       >
-                        <CreditCard className="h-4 w-4" />
-                        Complete Payment
+                        {isActionLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ThumbsUp className="h-4 w-4" />}
+                        Confirm Receipt
                       </button>
                     </div>
-                  )}
-
-                  {/* Rejection */}
-                  {!showRejectionInput ? (
-                    <button
-                      className="btn-ghost w-full justify-center text-slate-400 hover:text-red-400 hover:bg-red-500/10"
-                      onClick={() => setShowRejectionInput(true)}
-                    >
-                      <XCircle className="h-4 w-4" />
-                      Reject Voucher
-                    </button>
                   ) : (
-                    <div className="space-y-3 border-t border-slate-800 pt-6">
-                      <textarea
-                        className="form-input bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
-                        placeholder="Reason for rejection..."
-                        rows={3}
-                        value={rejectionReason}
-                        onChange={(e) => setRejectionReason(e.target.value)}
-                      />
-                      <div className="flex gap-2">
+                    <>
+                      {/* Flexible Approval Chain - only shown after receipt */}
+                      {voucher.current_stage !== 'FINAL_PAYMENT' && (
+                        <div className="space-y-6">
+                          {/* Option 1: Forward to next person */}
+                          <div className="space-y-3">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Forward to Next Approver</label>
+                            {availableApprovers.length > 0 ? (
+                              <select
+                                className="form-input bg-slate-800 border-slate-700 text-white focus:ring-brand-500/20"
+                                value={selectedApproverId}
+                                onChange={(e) => setSelectedApproverId(e.target.value)}
+                              >
+                                <option value="">Select officer...</option>
+                                {availableApprovers.map(a => (
+                                  <option key={a.id} value={a.id} className="text-slate-900">
+                                    {a.name} ({a.user_number})
+                                  </option>
+                                ))}
+                              </select>
+                            ) : (
+                              <p className="text-xs font-bold text-amber-500 italic">No other eligible approvers available</p>
+                            )}
+                            <button
+                              className="btn-secondary w-full justify-center bg-white text-slate-900 border-transparent hover:bg-slate-100"
+                              disabled={isActionLoading || !selectedApproverId || availableApprovers.length === 0}
+                              onClick={() => handleAction(() => approveAndForward(voucher.id, selectedApproverId))}
+                            >
+                              {isActionLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
+                              Approve & Forward
+                            </button>
+                          </div>
+
+                          <div className="relative">
+                            <div className="absolute inset-0 flex items-center" aria-hidden="true">
+                              <div className="w-full border-t border-slate-800"></div>
+                            </div>
+                            <div className="relative flex justify-center text-[10px] font-black uppercase">
+                              <span className="bg-slate-900 px-2 text-slate-600">OR</span>
+                            </div>
+                          </div>
+
+                          {/* Option 2: Final approval to payment */}
+                          <div className="space-y-3">
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Assign Paying Officer</label>
+                            {availablePayers.length > 0 ? (
+                              <select
+                                className="form-input bg-slate-800 border-slate-700 text-white focus:ring-brand-500/20"
+                                value={selectedPayerId}
+                                onChange={(e) => setSelectedPayerId(e.target.value)}
+                              >
+                                <option value="">Select payer...</option>
+                                {availablePayers.map(p => (
+                                  <option key={p.id} value={p.id} className="text-slate-900">
+                                    {p.name} ({p.user_number})
+                                  </option>
+                                ))}
+                              </select>
+                            ) : (
+                              <p className="text-xs font-bold text-amber-500 italic">No eligible paying officers found</p>
+                            )}
+                            <button
+                              className="btn-primary w-full justify-center shadow-lg shadow-brand-900/20"
+                              disabled={isActionLoading || !selectedPayerId || availablePayers.length === 0}
+                              onClick={() => handleAction(() => approveToPayment(voucher.id, selectedPayerId))}
+                            >
+                              {isActionLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
+                              Send to Final Payment
+                            </button>
+                          </div>
+                        </div>
+                      )}
+
+                      {/* Payment stage */}
+                      {voucher.current_stage === 'FINAL_PAYMENT' && (
+                        <div className="space-y-4">
+                           <input
+                            type="number"
+                            placeholder="Confirm Amount"
+                            className="form-input bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+                            value={paymentAmount}
+                            onChange={(e) => setPaymentAmount(e.target.value)}
+                          />
+                          <input
+                            type="text"
+                            placeholder="Payment Reference"
+                            className="form-input bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+                            value={paymentRef}
+                            onChange={(e) => setPaymentRef(e.target.value)}
+                          />
+                          <button
+                            className="btn-primary w-full justify-center bg-emerald-500 hover:bg-emerald-600 shadow-lg shadow-emerald-900/20"
+                            disabled={isActionLoading || !paymentAmount || !paymentRef}
+                            onClick={() => handleAction(() => markPaid(voucher.id, parseFloat(paymentAmount), paymentRef))}
+                          >
+                            <CreditCard className="h-4 w-4" />
+                            Complete Payment
+                          </button>
+                        </div>
+                      )}
+
+                      {/* Rejection */}
+                      {!showRejectionInput ? (
                         <button
-                          className="btn-danger flex-1"
-                          disabled={isActionLoading || !rejectionReason.trim()}
-                          onClick={() => handleAction(() => rejectVoucher(voucher.id, rejectionReason))}
+                          className="btn-ghost w-full justify-center text-slate-400 hover:text-red-400 hover:bg-red-500/10"
+                          onClick={() => setShowRejectionInput(true)}
                         >
-                          Confirm
+                          <XCircle className="h-4 w-4" />
+                          Reject Voucher
                         </button>
-                        <button
-                          className="btn-ghost flex-1 text-slate-400 hover:text-white"
-                          onClick={() => setShowRejectionInput(false)}
-                        >
-                          Cancel
+                      ) : (
+                        <div className="space-y-3 border-t border-slate-800 pt-6">
+                          <textarea
+                            className="form-input bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
+                            placeholder="Reason for rejection..."
+                            rows={3}
+                            value={rejectionReason}
+                            onChange={(e) => setRejectionReason(e.target.value)}
+                          />
+                          <div className="flex gap-2">
+                            <button
+                              className="btn-danger flex-1"
+                              disabled={isActionLoading || !rejectionReason.trim()}
+                              onClick={() => handleAction(() => rejectVoucher(voucher.id, rejectionReason))}
+                            >
+                              Confirm
+                            </button>
+                            <button
+                              className="btn-ghost flex-1 text-slate-400 hover:text-white"
+                              onClick={() => setShowRejectionInput(false)}
+                            >
+                              Cancel
                         </button>
                       </div>
                     </div>
+                  )}
+                    </>
                   )}
                 </div>
               )}
@@ -475,7 +523,7 @@ export default function VoucherDetailPage() {
             <div className="card p-6 border-dashed bg-slate-50/50">
                <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Workflow Help</h3>
                <p className="text-xs leading-relaxed text-slate-400">
-                 As an authorized officer, you can either forward this request to another approver for additional verification, or send it directly to the Final Payment stage if all criteria are met.
+                 As an authorized officer, you must first confirm receipt of the physical or digital voucher before you can approve, forward, or process it.
                </p>
             </div>
           </div>

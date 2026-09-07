@@ -111,6 +111,16 @@ export async function createVoucher(input: {
 }
 
 /**
+ * Confirms that the current officer has received the voucher.
+ */
+export async function confirmReceipt(voucherId: string) {
+  const { error } = await supabase.rpc('confirm_voucher_receipt', {
+    p_voucher_id: voucherId,
+  })
+  if (error) throw error
+}
+
+/**
  * Flexible Approval: Forward to another officer.
  */
 export async function approveAndForward(voucherId: string, nextApproverId: string) {

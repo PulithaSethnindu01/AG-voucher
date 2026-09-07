@@ -12,9 +12,6 @@
 
 export type RoleName =
   | 'EMPLOYEE'
-  | 'FIRST_RECEIVER'
-  | 'SECOND_APPROVER'
-  | 'THIRD_APPROVER'
   | 'FINAL_PAYMENT_OFFICER'
   | 'ADMIN'
   | 'SUPERVISOR'
@@ -108,6 +105,7 @@ export interface Voucher {
   rejection_reason: string | null
   voucher_month: number | null
   voucher_year: number | null
+  is_received: boolean
   created_at: string
   updated_at: string
 }
@@ -135,6 +133,7 @@ export type VoucherHistoryAction =
   | 'PAID'
   | 'ASSIGNED_SECOND_APPROVER'
   | 'ASSIGNED_THIRD_APPROVER'
+  | 'RECEIVED'
 
 export interface VoucherHistory {
   id: string
