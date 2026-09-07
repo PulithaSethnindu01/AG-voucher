@@ -28,7 +28,7 @@ export default function VouchersPage() {
         const data = await fetchVouchers()
         setVouchers(data)
       } catch (err) {
-        setError('Failed to load vouchers. Please try again.')
+        setError('වවුචර් පූරණය කිරීමට අසමත් විය. කරුණාකර නැවත උත්සාහ කරන්න.')
         console.error(err)
       } finally {
         setIsLoading(false)
@@ -67,7 +67,7 @@ export default function VouchersPage() {
           {canCreate && (
             <Link to="/vouchers/new" className="btn-primary">
               <Plus className="h-4 w-4" />
-              New Voucher
+              නව වවුචරය
             </Link>
           )}
         </div>
@@ -108,16 +108,12 @@ export default function VouchersPage() {
             <Search className="absolute left-3.5 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400 transition-colors group-focus-within:text-brand-500" />
             <input
               type="text"
-              placeholder="Search by voucher number or requester..."
+              placeholder="වවුචර් අංකය හෝ ඉල්ලුම්කරු අනුව සොයන්න..."
               className="form-input pl-10"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          <button className="btn-secondary sm:w-auto">
-            <Filter className="h-4 w-4" />
-            Filters
-          </button>
         </div>
 
         {error && <Alert variant="error">{error}</Alert>}
@@ -132,13 +128,12 @@ export default function VouchersPage() {
               <table className="min-w-full divide-y divide-slate-100">
                 <thead>
                   <tr>
-                    <th className="table-header px-6 py-4">Voucher #</th>
-                    <th className="table-header px-6 py-4">Period</th>
-                    <th className="table-header px-6 py-4">Requester</th>
-                    <th className="table-header px-6 py-4">Type</th>
-                    <th className="table-header px-6 py-4">Amount</th>
-                    <th className="table-header px-6 py-4 text-center">Status</th>
-                    <th className="table-header px-6 py-4 text-right">Actions</th>
+                    <th className="table-header px-6 py-4">වවුචරය #</th>
+                    <th className="table-header px-6 py-4">කාලය</th>
+                    <th className="table-header px-6 py-4">ඉල්ලුම්කරු</th>
+                    <th className="table-header px-6 py-4">වර්ගය</th>
+                    <th className="table-header px-6 py-4 text-center">තත්ත්වය</th>
+                    <th className="table-header px-6 py-4 text-right">ක්‍රියා</th>
                   </tr>
                 </thead>
                 <tbody className="bg-white">
@@ -164,9 +159,6 @@ export default function VouchersPage() {
                       <td className="table-cell text-slate-500 font-medium">
                         {voucher.voucher_type_name}
                       </td>
-                      <td className="table-cell font-bold text-slate-900 tabular-nums">
-                        {voucher.amount ? `$${voucher.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}` : '-'}
-                      </td>
                       <td className="table-cell text-center">
                         <VoucherStatusBadge status={voucher.status} />
                       </td>
@@ -175,7 +167,7 @@ export default function VouchersPage() {
                           to={`/vouchers/${voucher.id}`}
                           className="btn-ghost text-brand-600 hover:bg-brand-50 hover:text-brand-700 font-bold"
                         >
-                          Details
+                          විස්තර
                         </Link>
                       </td>
                     </tr>

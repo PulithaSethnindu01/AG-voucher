@@ -37,8 +37,8 @@ import {
 import type { VoucherHistory, VoucherWithDetails } from '../../types/database'
 
 const MONTH_NAMES = [
-  '', 'January', 'February', 'March', 'April', 'May', 'June',
-  'July', 'August', 'September', 'October', 'November', 'December'
+  '', 'ජනවාරි', 'පෙබරවාරි', 'මාර්තු', 'අප්‍රේල්', 'මැයි', 'ජුනි',
+  'ජුලි', 'අගෝස්තු', 'සැප්තැම්බර්', 'ඔක්තෝබර්', 'නොවැම්බර්', 'දෙසැම්බර්'
 ]
 
 const STAGE_LABELS: Record<string, string> = {
@@ -102,7 +102,7 @@ export default function VoucherDetailPage() {
         }
       }
     } catch (err) {
-      setError('Failed to load voucher details.')
+      setError('වවුචර් විස්තර පූරණය කිරීමට අසමත් විය.')
       console.error(err)
     } finally {
       setIsLoading(false)
@@ -181,7 +181,7 @@ export default function VoucherDetailPage() {
             Back to Vouchers
           </Link>
           <div className="flex items-center gap-3">
-             <span className="text-xs font-bold uppercase tracking-widest text-slate-400">Status</span>
+             <span className="text-xs font-bold uppercase tracking-widest text-slate-400">තත්ත්වය</span>
              <VoucherStatusBadge status={voucher.status} />
           </div>
         </div>
@@ -193,7 +193,7 @@ export default function VoucherDetailPage() {
               <div className="bg-slate-50/50 border-b border-slate-100 px-6 py-4 flex items-center justify-between">
                  <div className="flex items-center gap-2">
                    <FileText className="h-5 w-5 text-slate-400" />
-                   <h2 className="text-sm font-bold uppercase tracking-wider text-slate-600">Voucher Information</h2>
+                   <h2 className="text-sm font-bold uppercase tracking-wider text-slate-600">වවුචර් තොරතුරු</h2>
                  </div>
                  <span className="text-xs font-mono font-bold text-slate-400">#{voucher.voucher_number}</span>
               </div>
@@ -203,7 +203,7 @@ export default function VoucherDetailPage() {
                   <div className="space-y-1">
                     <dt className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
                        <Tag className="h-3 w-3" />
-                       Voucher Type
+                       වවුචර් වර්ගය
                     </dt>
                     <dd className="text-sm font-bold text-slate-900">{voucher.voucher_type_name}</dd>
                   </div>
@@ -211,7 +211,7 @@ export default function VoucherDetailPage() {
                   <div className="space-y-1">
                     <dt className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
                        <User className="h-3 w-3" />
-                       Requester
+                       අයදුම්කරු
                     </dt>
                     <dd className="flex flex-col">
                       <span className="text-sm font-bold text-slate-900">{voucher.requester_name}</span>
@@ -222,7 +222,7 @@ export default function VoucherDetailPage() {
                   <div className="space-y-1">
                     <dt className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
                        <Calendar className="h-3 w-3" />
-                       Voucher Period
+                       වවුචර් කාල සීමාව
                     </dt>
                     <dd className="text-sm font-bold text-slate-900">
                       {voucher.voucher_month ? MONTH_NAMES[voucher.voucher_month] : '-'} {voucher.voucher_year || '-'}
@@ -232,27 +232,17 @@ export default function VoucherDetailPage() {
                   <div className="space-y-1">
                     <dt className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
                        <Clock className="h-3 w-3" />
-                       Created On
+                       නිර්මාණය කරන ලද්දේ
                     </dt>
                     <dd className="text-sm font-bold text-slate-900">
                       {new Date(voucher.created_at).toLocaleDateString(undefined, { dateStyle: 'long' })}
                     </dd>
                   </div>
 
-                  <div className="sm:col-span-2 space-y-1">
-                    <dt className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
-                       <DollarSign className="h-3 w-3" />
-                       Amount
-                    </dt>
-                    <dd className="text-2xl font-black text-slate-900 tabular-nums">
-                      {voucher.amount ? `$${voucher.amount.toLocaleString(undefined, { minimumFractionDigits: 2 })}` : 'Not set'}
-                    </dd>
-                  </div>
-
                   <div className="sm:col-span-2 space-y-2">
                     <dt className="flex items-center gap-2 text-xs font-bold uppercase tracking-widest text-slate-400">
                        <Activity className="h-3 w-3" />
-                       Description
+                       විස්තර
                     </dt>
                     <dd className="rounded-xl bg-slate-50 p-4 text-sm font-medium leading-relaxed text-slate-600 border border-slate-100 italic">
                       {voucher.description || 'No detailed description provided for this voucher.'}
@@ -266,7 +256,7 @@ export default function VoucherDetailPage() {
             <div className="card overflow-hidden">
                <div className="bg-slate-50/50 border-b border-slate-100 px-6 py-4 flex items-center gap-2">
                  <History className="h-5 w-5 text-slate-400" />
-                 <h2 className="text-sm font-bold uppercase tracking-wider text-slate-600">Workflow Timeline</h2>
+                 <h2 className="text-sm font-bold uppercase tracking-wider text-slate-600">කාර්ය ප්‍රවාහ කාලරේඛාව</h2>
               </div>
               <div className="p-6">
                 <div className="flow-root">
@@ -329,10 +319,10 @@ export default function VoucherDetailPage() {
           {/* Sidebar / Actions */}
           <div className="space-y-6">
             <div className="card p-6 bg-slate-900 text-white shadow-xl shadow-slate-200">
-              <h2 className="mb-6 text-xs font-black uppercase tracking-[0.2em] text-slate-400">Live Status</h2>
+              <h2 className="mb-6 text-xs font-black uppercase tracking-[0.2em] text-slate-400">සජීවී තත්ත්වය</h2>
               <div className="space-y-6">
                 <div className="space-y-1">
-                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Current Stage</p>
+                  <p className="text-[10px] font-bold uppercase tracking-wider text-slate-500">වත්මන් අදියර</p>
                   <p className="text-lg font-black tracking-tight">{getDisplayStage()}</p>
                 </div>
                 <div className="space-y-1">
@@ -352,7 +342,7 @@ export default function VoucherDetailPage() {
                   {!voucher.is_received ? (
                     <div className="space-y-4">
                        <p className="text-xs font-medium text-slate-400 italic">
-                         You have received this voucher. Please confirm receipt to proceed with actions.
+                         ඔබට මෙම වවුචරය ලැබී ඇත. ක්‍රියාමාර්ග ගැනීමට කරුණාකර රිසිට්පත ලැබුණු බව තහවුරු කරන්න.
                        </p>
                        <button
                         className="btn-primary w-full justify-center shadow-lg shadow-brand-900/20"
@@ -360,7 +350,7 @@ export default function VoucherDetailPage() {
                         onClick={() => handleAction(() => confirmReceipt(voucher.id))}
                       >
                         {isActionLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ThumbsUp className="h-4 w-4" />}
-                        Confirm Receipt
+                        ලැබුණු බව තහවුරු කරන්න.
                       </button>
                     </div>
                   ) : (
@@ -370,14 +360,14 @@ export default function VoucherDetailPage() {
                         <div className="space-y-6">
                           {/* Option 1: Forward to next person */}
                           <div className="space-y-3">
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Forward to Next Approver</label>
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">ඊළඟ අනුමත කරන්නා වෙත යොමු කරන්න.</label>
                             {availableApprovers.length > 0 ? (
                               <select
                                 className="form-input bg-slate-800 border-slate-700 text-white focus:ring-brand-500/20"
                                 value={selectedApproverId}
                                 onChange={(e) => setSelectedApproverId(e.target.value)}
                               >
-                                <option value="">Select officer...</option>
+                                <option value="">නිලධාරියා තෝරන්න...</option>
                                 {availableApprovers.map(a => (
                                   <option key={a.id} value={a.id} className="text-slate-900">
                                     {a.name} ({a.user_number})
@@ -385,7 +375,7 @@ export default function VoucherDetailPage() {
                                 ))}
                               </select>
                             ) : (
-                              <p className="text-xs font-bold text-amber-500 italic">No other eligible approvers available</p>
+                              <p className="text-xs font-bold text-amber-500 italic">වෙනත් සුදුසුකම් ලත් අනුමත කරන්නන් නොමැත</p>
                             )}
                             <button
                               className="btn-secondary w-full justify-center bg-white text-slate-900 border-transparent hover:bg-slate-100"
@@ -393,7 +383,7 @@ export default function VoucherDetailPage() {
                               onClick={() => handleAction(() => approveAndForward(voucher.id, selectedApproverId))}
                             >
                               {isActionLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <Send className="h-4 w-4" />}
-                              Approve & Forward
+                              අනුමත කර ඉදිරියට යවන්න
                             </button>
                           </div>
 
@@ -408,14 +398,14 @@ export default function VoucherDetailPage() {
 
                           {/* Option 2: Final approval to payment */}
                           <div className="space-y-3">
-                            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">Assign Paying Officer</label>
+                            <label className="text-[10px] font-bold uppercase tracking-wider text-slate-500">සරප් නිලධාරියා තෝරන්න</label>
                             {availablePayers.length > 0 ? (
                               <select
                                 className="form-input bg-slate-800 border-slate-700 text-white focus:ring-brand-500/20"
                                 value={selectedPayerId}
                                 onChange={(e) => setSelectedPayerId(e.target.value)}
                               >
-                                <option value="">Select payer...</option>
+                                <option value="">තෝරන්න...</option>
                                 {availablePayers.map(p => (
                                   <option key={p.id} value={p.id} className="text-slate-900">
                                     {p.name} ({p.user_number})
@@ -431,7 +421,7 @@ export default function VoucherDetailPage() {
                               onClick={() => handleAction(() => approveToPayment(voucher.id, selectedPayerId))}
                             >
                               {isActionLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <CheckCircle2 className="h-4 w-4" />}
-                              Send to Final Payment
+                              අවසාන ගෙවීමට යවන්න
                             </button>
                           </div>
                         </div>
@@ -442,7 +432,7 @@ export default function VoucherDetailPage() {
                         <div className="space-y-4">
                            <input
                             type="number"
-                            placeholder="Confirm Amount"
+                            placeholder="මුදල තහවුරු කරන්න"
                             className="form-input bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
                             value={paymentAmount}
                             onChange={(e) => setPaymentAmount(e.target.value)}
@@ -460,7 +450,7 @@ export default function VoucherDetailPage() {
                             onClick={() => handleAction(() => markPaid(voucher.id, parseFloat(paymentAmount), paymentRef))}
                           >
                             <CreditCard className="h-4 w-4" />
-                            Complete Payment
+                            ගෙවීම සම්පූර්ණ කරන්න
                           </button>
                         </div>
                       )}
@@ -472,13 +462,13 @@ export default function VoucherDetailPage() {
                           onClick={() => setShowRejectionInput(true)}
                         >
                           <XCircle className="h-4 w-4" />
-                          Reject Voucher
+                          වවුචරය ප්‍රතික්ෂේප කරන්න
                         </button>
                       ) : (
                         <div className="space-y-3 border-t border-slate-800 pt-6">
                           <textarea
                             className="form-input bg-slate-800 border-slate-700 text-white placeholder:text-slate-500"
-                            placeholder="Reason for rejection..."
+                            placeholder="ප්‍රතික්ෂේප කිරීමට හේතුව..."
                             rows={3}
                             value={rejectionReason}
                             onChange={(e) => setRejectionReason(e.target.value)}
@@ -513,7 +503,7 @@ export default function VoucherDetailPage() {
                     onClick={() => handleAction(() => resubmitVoucher(voucher.id))}
                   >
                     <RotateCcw className="h-4 w-4" />
-                    Resubmit for Approval
+                    අනුමැතිය සඳහා නැවත ඉදිරිපත් කරන්න
                   </button>
                 </div>
               )}
@@ -521,9 +511,9 @@ export default function VoucherDetailPage() {
 
             {/* Help / Info Card */}
             <div className="card p-6 border-dashed bg-slate-50/50">
-               <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">Workflow Help</h3>
+               <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-2">කාර්ය ප්‍රවාහ උදව්</h3>
                <p className="text-xs leading-relaxed text-slate-400">
-                 As an authorized officer, you must first confirm receipt of the physical or digital voucher before you can approve, forward, or process it.
+                 බලයලත් නිලධාරියෙකු ලෙස, ඔබට එය අනුමත කිරීමට, ඉදිරියට යැවීමට හෝ සැකසීමට පෙර භෞතික හෝ ඩිජිටල් වවුචරය ලැබුණු බව පළමුව තහවුරු කළ යුතුය.
                </p>
             </div>
           </div>

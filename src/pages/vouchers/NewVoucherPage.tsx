@@ -331,20 +331,20 @@ export default function NewVoucherPage() {
             <div className="card p-6 border-dashed bg-brand-50/30 border-brand-200">
                <h3 className="text-xs font-black uppercase tracking-[0.2em] text-brand-600 mb-4 flex items-center gap-2">
                  <Info className="h-4 w-4" />
-                 Guidelines
+                 මාර්ගෝපදේශ
                </h3>
                <ul className="space-y-4">
                  <li className="flex gap-3">
                    <div className="h-5 w-5 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-[10px] font-bold shrink-0">1</div>
-                   <p className="text-xs leading-relaxed text-slate-600 font-medium">Search for the employee who is requesting the payment using their Name or ID.</p>
+                   <p className="text-xs leading-relaxed text-slate-600 font-medium">නම හෝ සේවා අංකය භාවිතා කර ගෙවීම ඉල්ලා සිටින සේවකයා සොයන්න.</p>
                  </li>
                  <li className="flex gap-3">
                    <div className="h-5 w-5 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-[10px] font-bold shrink-0">2</div>
-                   <p className="text-xs leading-relaxed text-slate-600 font-medium">Specify the correct Month and Year for accounting and tracking purposes.</p>
+                   <p className="text-xs leading-relaxed text-slate-600 font-medium">ගිණුම්කරණ සහ ලුහුබැඳීමේ අරමුණු සඳහා නිවැරදි මාසය සහ වර්ෂය සඳහන් කරන්න.</p>
                  </li>
                  <li className="flex gap-3">
                    <div className="h-5 w-5 rounded-full bg-brand-100 text-brand-600 flex items-center justify-center text-[10px] font-bold shrink-0">3</div>
-                   <p className="text-xs leading-relaxed text-slate-600 font-medium">Be specific in the description to help approvers verify the request faster.</p>
+                   <p className="text-xs leading-relaxed text-slate-600 font-medium">අනුමත කරන්නන්ට ඉල්ලීම වේගයෙන් සත්‍යාපනය කිරීමට උපකාර කිරීම සඳහා විස්තරයේ නිශ්චිත වන්න.</p>
                  </li>
                </ul>
             </div>

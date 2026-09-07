@@ -12,16 +12,16 @@ import type { ProfileWithRoles, RoleName } from '../types/database'
 function friendlyAuthError(message: string): string {
   const lower = message.toLowerCase()
   if (lower.includes('invalid login credentials')) {
-    return 'Incorrect user number or password.'
+    return 'වැරදි සේවා අංකයක් හෝ මුරපදයකි.'
   }
   if (lower.includes('user already registered') || lower.includes('already registered')) {
-    return 'That user number is already registered.'
+    return 'එම සේවා අංකය දැනටමත් ලියාපදිංචි කර ඇත.'
   }
   if (lower.includes('rate limit')) {
-    return 'Too many attempts. Please wait a moment and try again.'
+    return 'උත්සාහයන් වැඩියි. කරුණාකර මොහොතක් රැඳී සිට නැවත උත්සාහ කරන්න.'
   }
   if (lower.includes('network') || lower.includes('fetch')) {
-    return 'Network error. Please check your connection and try again.'
+    return 'කරුණාකර ඔබගේ සම්බන්ධතාවය පරීක්ෂා කර නැවත උත්සාහ කරන්න.'
   }
   return 'Something went wrong. Please try again.'
 }
@@ -50,7 +50,7 @@ export async function registerUser(input: RegisterInput): Promise<AuthResult> {
     if (!authUser) {
       return {
         success: false,
-        error: 'Registration could not be completed. Please try again.',
+        error: 'ලියාපදිංචිය සම්පූර්ණ කළ නොහැකි විය. කරුණාකර නැවත උත්සාහ කරන්න.',
       }
     }
 
@@ -68,9 +68,9 @@ export async function registerUser(input: RegisterInput): Promise<AuthResult> {
 
     if (profileError) {
       if (profileError.code === '23505') {
-        return { success: false, error: 'That user number is already registered.' }
+        return { success: false, error: 'එම සේවා අංකය දැනටමත් ලියාපදිංචි කර ඇත.' }
       }
-      return { success: false, error: 'Registration could not be completed. Please try again.' }
+      return { success: false, error: 'ලියාපදිංචිය සම්පූර්ණ කළ නොහැකි විය. කරුණාකර නැවත උත්සාහ කරන්න.' }
     }
 
     return { success: true }
@@ -99,11 +99,11 @@ export async function loginUser(input: LoginInput): Promise<AuthResult> {
     const profile = await fetchOwnProfile()
     if (!profile) {
       await supabase.auth.signOut()
-      return { success: false, error: 'Account not found. Please contact an administrator.' }
+      return { success: false, error: 'ගිණුම හමු නොවීය. කරුණාකර පරිපාලකවරයෙකු අමතන්න.' }
     }
     if (!profile.is_active) {
       await supabase.auth.signOut()
-      return { success: false, error: 'This account has been disabled. Please contact an administrator.' }
+      return { success: false, error: 'මෙම ගිණුම අක්‍රිය කර ඇත. කරුණාකර පරිපාලකවරයෙකු අමතන්න.' }
     }
 
     return { success: true }
