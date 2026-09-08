@@ -1,4 +1,4 @@
-import { Eye, EyeOff, FileStack, Loader2, ArrowLeft, Key, User, Phone } from 'lucide-react'
+import { Eye, EyeOff, Loader2, ArrowLeft, Key, User, Phone } from 'lucide-react'
 import { useState, type FormEvent } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { Alert } from '../../components/ui/Alert'

@@ -91,7 +91,7 @@ export default function LoginPage() {
                   <label htmlFor="password" className="form-label mb-0">
                     මුරපදය
                   </label>
-                  <Link to="/forgot-password" size="sm" className="text-[11px] font-bold uppercase tracking-wider text-brand-600 hover:text-brand-700 transition-colors">
+                  <Link to="/forgot-password" className="text-[11px] font-bold uppercase tracking-wider text-brand-600 hover:text-brand-700 transition-colors">
                     අමතකද?
                   </Link>
                 </div>
