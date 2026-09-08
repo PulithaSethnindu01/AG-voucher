@@ -57,9 +57,9 @@ export default function RegisterPage() {
           <div className="mb-4 flex h-16 w-16 items-center justify-center rounded-2xl bg-brand-600 text-white shadow-xl shadow-brand-200 animate-in zoom-in duration-500">
             <FileStack className="h-8 w-8" aria-hidden="true" />
           </div>
-          <h1 className="text-2xl font-black tracking-tight text-slate-900">Create Account</h1>
+          <h1 className="text-2xl font-black tracking-tight text-slate-900 uppercase">ගිණුමක් සාදන්න</h1>
           <p className="mt-2 text-sm font-medium text-slate-500 text-balance">
-            Join the internal management system. All new accounts are standard employees.
+            අභ්‍යන්තර කළමනාකරණ පද්ධතියට එක්වන්න. සියලුම නව ගිණුම් සාමාන්‍ය සේවකයින් ලෙස ලියාපදිංචි වේ.
           </p>
         </div>
 
@@ -82,7 +82,7 @@ export default function RegisterPage() {
                     name="name"
                     type="text"
                     autoComplete="name"
-                    placeholder="රොබට් සිල්වා"
+                    placeholder="උදා: නිමල් සිල්වා"
                     className={`form-input ${fieldMessage(fieldErrors, 'name') ? 'border-red-300 focus:border-red-500 focus:ring-red-500/10' : ''}`}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
@@ -103,12 +103,11 @@ export default function RegisterPage() {
                     name="userNumber"
                     type="text"
                     autoComplete="username"
-                    placeholder="e.g. 1024"
+                    placeholder="උදා: 1024"
                     className={`form-input ${fieldMessage(fieldErrors, 'userNumber') ? 'border-red-300 focus:border-red-500 focus:ring-red-500/10' : ''}`}
                     value={userNumber}
                     onChange={(e) => setUserNumber(e.target.value)}
                     disabled={isSubmitting}
-                    aria-invalid={Boolean(fieldMessage(fieldErrors, 'userNumber'))}
                   />
                   {fieldMessage(fieldErrors, 'userNumber') && (
                     <p className="form-error">{fieldMessage(fieldErrors, 'userNumber')}</p>
@@ -177,7 +176,7 @@ export default function RegisterPage() {
                   <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
                 ) : (
                   <>
-                    Create Account
+                    ලියාපදිංචි වන්න
                     <ArrowRight className="h-4 w-4" />
                   </>
                 )}
@@ -189,7 +188,7 @@ export default function RegisterPage() {
             <p className="text-sm font-medium text-slate-500">
               දැනටමත් ගිණුමක් තිබේද?{' '}
               <Link to="/login" className="font-bold text-brand-600 hover:text-brand-700 transition-colors">
-                Sign in
+                පුරනය වන්න
               </Link>
             </p>
           </div>

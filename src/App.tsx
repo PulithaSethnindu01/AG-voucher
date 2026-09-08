@@ -3,6 +3,7 @@ import { ProtectedRoute, PublicOnlyRoute } from './components/ProtectedRoute'
 import { AuthProvider } from './context/AuthContext'
 import LoginPage from './pages/auth/LoginPage'
 import RegisterPage from './pages/auth/RegisterPage'
+import ForgotPasswordPage from './pages/auth/ForgotPasswordPage'
 import VouchersPage from './pages/vouchers/VouchersPage'
 import VoucherDetailPage from './pages/vouchers/VoucherDetailPage'
 import NewVoucherPage from './pages/vouchers/NewVoucherPage'
@@ -26,6 +27,14 @@ export default function App() {
             element={
               <PublicOnlyRoute>
                 <RegisterPage />
+              </PublicOnlyRoute>
+            }
+          />
+          <Route
+            path="/forgot-password"
+            element={
+              <PublicOnlyRoute>
+                <ForgotPasswordPage />
               </PublicOnlyRoute>
             }
           />

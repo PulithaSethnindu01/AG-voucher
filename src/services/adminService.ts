@@ -49,6 +49,17 @@ export async function toggleUserStatus(profileId: string, isActive: boolean) {
   if (error) throw error
 }
 
+/**
+ * Resets a user's password. Only Supervisor can call this.
+ */
+export async function adminResetPassword(userId: string, newPassword: string) {
+  const { error } = await supabase.rpc('admin_reset_password', {
+    p_user_id: userId,
+    p_new_password: newPassword,
+  })
+  if (error) throw error
+}
+
 export async function fetchAppConfig() {
   const { data, error } = await supabase
     .from('app_config')

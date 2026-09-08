@@ -50,7 +50,7 @@ export default function LoginPage() {
             <FileStack className="h-8 w-8" aria-hidden="true" />
           </div>
           <h1 className="text-2xl font-black tracking-tight text-slate-900">VOUCHER INFORMATION SYSTEM</h1>
-          <p className="mt-2 text-sm font-medium text-slate-500">ඔබේ වවුචර් කළමනාකරණය කිරීමට පුරන්න</p>
+          <p className="mt-2 text-sm font-medium text-slate-500 text-balance">ඔබේ වවුචර් කළමනාකරණය කිරීමට පුරන්න</p>
         </div>
 
         <div className="card overflow-hidden shadow-xl shadow-slate-200/50 animate-in slide-in-from-bottom-4 duration-700">
@@ -91,9 +91,9 @@ export default function LoginPage() {
                   <label htmlFor="password" className="form-label mb-0">
                     මුරපදය
                   </label>
-                  <button type="button" className="text-[11px] font-bold uppercase tracking-wider text-brand-600 hover:text-brand-700 transition-colors">
-                    Forgot?
-                  </button>
+                  <Link to="/forgot-password" size="sm" className="text-[11px] font-bold uppercase tracking-wider text-brand-600 hover:text-brand-700 transition-colors">
+                    අමතකද?
+                  </Link>
                 </div>
                 <div className="relative group">
                   <input
@@ -131,7 +131,7 @@ export default function LoginPage() {
                   <Loader2 className="h-5 w-5 animate-spin" aria-hidden="true" />
                 ) : (
                   <>
-                    Sign in
+                    පුරනය වන්න
                     <ArrowRight className="h-4 w-4" />
                   </>
                 )}

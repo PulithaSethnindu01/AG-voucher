@@ -54,11 +54,7 @@ export async function registerUser(input: RegisterInput): Promise<AuthResult> {
       }
     }
 
-    // Create the corresponding profile row. The database also enforces
-    // uniqueness of user_number and defaults the EMPLOYEE role via a
-    // trigger/RPC (see migrations) - this call is defense-in-depth /
-    // primary creation path guarded by RLS (a user may only insert their
-    // own profile row).
+    // Create the corresponding profile row.
     const { error: profileError } = await supabase.from('profiles').insert({
       id: authUser.id,
       user_number: userNumber,
@@ -93,9 +89,6 @@ export async function loginUser(input: LoginInput): Promise<AuthResult> {
       return { success: false, error: friendlyAuthError(error.message) }
     }
 
-    // Confirm the profile is active. If disabled, sign the user back out
-    // immediately - RLS also blocks disabled users from doing anything
-    // meaningful, but we want a clear, immediate error at login time.
     const profile = await fetchOwnProfile()
     if (!profile) {
       await supabase.auth.signOut()
@@ -109,6 +102,31 @@ export async function loginUser(input: LoginInput): Promise<AuthResult> {
     return { success: true }
   } catch (err) {
     return { success: false, error: friendlyAuthError(err instanceof Error ? err.message : '') }
+  }
+}
+
+/**
+ * Resets a user's password by verifying their user number and mobile number.
+ */
+export async function resetPasswordSelfService(input: {
+  userNumber: string
+  mobileNumber: string
+  newPassword: string
+}): Promise<AuthResult> {
+  try {
+    const { error } = await supabase.rpc('reset_password_self_service', {
+      p_user_number: normalizeUserNumber(input.userNumber),
+      p_mobile_number: input.mobileNumber.trim(),
+      p_new_password: input.newPassword
+    })
+
+    if (error) {
+      return { success: false, error: error.message }
+    }
+
+    return { success: true }
+  } catch (err) {
+    return { success: false, error: 'මුරපදය නැවත සැකසීමට අසමත් විය. කරුණාකර ඔබගේ දත්ත පරීක්ෂා කරන්න.' }
   }
 }
 

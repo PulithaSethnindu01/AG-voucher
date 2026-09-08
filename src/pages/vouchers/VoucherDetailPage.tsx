@@ -103,7 +103,7 @@ export default function VoucherDetailPage() {
       setHistory(hData)
 
       if (vData && vData.status === 'PENDING' && vData.current_officer_id === profile?.id && vData.is_received) {
-        if (vData.current_stage !== 'FINAL_PAYMENT' && vData.current_stage !== 'FIFTH_APPROVAL') {
+        if (vData.current_stage !== 'FINAL_PAYMENT' && (vData.current_stage as string) !== 'FIFTH_APPROVAL') {
            const approvers = await fetchActiveApprovers()
            setAvailableApprovers(approvers.filter(a => a.id !== profile?.id))
         }
@@ -184,7 +184,7 @@ export default function VoucherDetailPage() {
         <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
           <Link to="/" className="btn-ghost -ml-2 text-slate-500">
             <ArrowLeft className="h-4 w-4" />
-            නැවත පුවරුවට
+            පසුපසට
           </Link>
           <div className="flex items-center gap-3">
              <span className="text-xs font-bold uppercase tracking-widest text-slate-400">තත්ත්වය</span>
@@ -346,7 +346,7 @@ export default function VoucherDetailPage() {
                         disabled={isActionLoading}
                         onClick={() => handleAction(() => confirmReceipt(voucher.id))}
                       >
-                        {isActionLoading ? <Loader2 className="h-5 w-5 animate-spin" /> : <ThumbsUp className="h-5 w-5" />}
+                        {isActionLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ThumbsUp className="h-5 w-5" />}
                         ලැබුණු බව තහවුරු කරන්න
                       </button>
                     </div>
@@ -354,7 +354,7 @@ export default function VoucherDetailPage() {
                     <div className="space-y-8 animate-in slide-in-from-bottom-2 duration-500">
                       {voucher.current_stage !== 'FINAL_PAYMENT' && (
                         <div className="space-y-8">
-                          {voucher.current_stage !== 'FIFTH_APPROVAL' && (
+                          {(voucher.current_stage as string) !== 'FIFTH_APPROVAL' && (
                             <div className="space-y-4">
                               <label className="text-[10px] font-black uppercase tracking-[0.15em] text-slate-500">ඊළඟ අනුමත කරන්නා වෙත යොමු කරන්න</label>
                               <select
@@ -504,7 +504,7 @@ export default function VoucherDetailPage() {
             </div>
 
             <div className="card p-8 border-dashed bg-slate-50/50 border-slate-200">
-               <h3 className="text-xs font-bold uppercase tracking-wider text-slate-500 mb-3">කාර්ය ප්‍රවාහ උපදෙස්</h3>
+               <h3 className="text-xs font-black uppercase tracking-[0.2em] text-slate-500 mb-3">කාර්ය ප්‍රවාහ උපදෙස්</h3>
                <p className="text-xs leading-relaxed text-slate-400 font-medium text-balance">
                  බලයලත් නිලධාරියෙකු ලෙස, ඔබට එය අනුමත කිරීමට, ඉදිරියට යැවීමට හෝ සැකසීමට පෙර වවුචරය භෞතිකව හෝ ඩිජිටල් ලෙස ලැබුණු බව පළමුව තහවුරු කළ යුතුය.
                </p>
