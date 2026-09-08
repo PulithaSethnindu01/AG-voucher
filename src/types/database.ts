@@ -119,6 +119,9 @@ export interface VoucherWithDetails extends Voucher {
   voucher_type_name: string | null
   created_by_name: string | null
   current_officer_name: string | null
+  actual_paid_at: string | null
+  actual_paid_month: number | null
+  actual_paid_year: number | null
 }
 
 // ---------------------------------------------------------------------------
@@ -130,6 +133,8 @@ export type VoucherHistoryAction =
   | 'FIRST_APPROVED'
   | 'SECOND_APPROVED'
   | 'THIRD_APPROVED'
+  | 'FOURTH_APPROVAL'
+  | 'FIFTH_APPROVAL'
   | 'REJECTED'
   | 'RESUBMITTED'
   | 'PAID'

@@ -20,16 +20,18 @@ export async function fetchVouchers() {
 }
 
 export async function fetchVouchersForExport(year: number, month?: number) {
+  // We filter by ACTUAL payment date, not the requested voucher period.
   let query = supabase
     .from('vouchers_with_details')
     .select('*')
-    .eq('voucher_year', year)
+    .eq('actual_paid_year', year)
+    .eq('status', 'PAID') // Only exported completed vouchers
 
   if (month) {
-    query = query.eq('voucher_month', month)
+    query = query.eq('actual_paid_month', month)
   }
 
-  const { data, error } = await query.order('created_at', { ascending: true })
+  const { data, error } = await query.order('actual_paid_at', { ascending: true })
 
   if (error) throw error
   return data as VoucherWithDetails[]
