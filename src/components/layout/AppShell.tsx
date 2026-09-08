@@ -34,7 +34,7 @@ export function AppShell({ children }: { children: ReactNode }) {
               </div>
               <div className="flex flex-col leading-tight">
                 <span className="text-sm font-bold tracking-tight text-slate-900 sm:text-base uppercase">
-                  AG Voucher
+                  Voucher
                 </span>
                 <span className="text-[10px] font-medium uppercase tracking-widest text-slate-400">
                   කළමනාකරණ පද්ධතිය
